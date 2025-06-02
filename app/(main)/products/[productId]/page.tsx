@@ -8,13 +8,7 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import {
   Dialog,
   DialogContent,
@@ -336,7 +330,6 @@ interface ProductType {
   price: number;
   discountPercentage: number;
   quantity: number;
-  sizes: Array<{ name: string; price: number }>;
   colors: Array<{ name: string; value: string }>;
   categoryId: Id<"categories">;
   badges: string[];
@@ -364,7 +357,7 @@ function ProductDetails({
   const addReviewMutation = useMutation(api.reviews.addReview);
   const deleteReviewMutation = useMutation(api.reviews.deleteReview);
 
-  const [selectedSize, setSelectedSize] = useState<string>("");
+
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -642,45 +635,7 @@ function ProductDetails({
                 </Badge>
               </div>
               <Separator className="my-4 sm:my-6" />
-              {product.sizes.length > 0 && (
-                <div className="space-y-1.5 sm:space-y-2">
-                  <label className="text-sm font-medium">اختر المقاس</label>
-                  <Select value={selectedSize} onValueChange={setSelectedSize}>
-                    <SelectTrigger className="w-full sm:w-[200px] mt-2">
-                      <SelectValue placeholder="اختر المقاس" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {product.sizes.map((size) => (
-                        <SelectItem key={size.name} value={size.name}>
-                          {size.name} -{" "}
-                          {formatPrice(
-                            size.price * (1 - product.discountPercentage / 100)
-                          )}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
-              {selectedSize && (
-                <div className="flex items-center gap-2">
-                  <span className="text-xl font-bold">
-                    {formatPrice(
-                      (product.sizes.find((s) => s.name === selectedSize)
-                        ?.price ?? product.price) *
-                        (1 - product.discountPercentage / 100)
-                    )}
-                  </span>
-                  {product.discountPercentage > 0 && (
-                    <span className="text-sm text-muted-foreground line-through">
-                      {formatPrice(
-                        product.sizes.find((s) => s.name === selectedSize)
-                          ?.price ?? product.price
-                      )}
-                    </span>
-                  )}
-                </div>
-              )}
+
               {product.colors.length > 0 && (
                 <div className="space-y-1.5 sm:space-y-2">
                   <label className="text-sm font-medium">اختر اللون</label>
@@ -749,7 +704,6 @@ function ProductDetails({
                     addToCart(
                       product._id,
                       quantity,
-                      selectedSize,
                       selectedColor
                     );
                   }}

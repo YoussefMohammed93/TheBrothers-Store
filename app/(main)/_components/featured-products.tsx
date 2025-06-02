@@ -277,8 +277,14 @@ function ProductsSectionBase() {
           />
         </div>
         {featuredProducts.length === 0 ? (
-          <div className="text-center py-10">
-            <p className="text-muted-foreground">لا توجد منتجات مميزة حالياً</p>
+          <div
+            className="text-center py-10 border rounded-md"
+            role="status"
+            aria-live="polite"
+          >
+            <p className="text-muted-foreground">
+              لا توجد منتجات مميزة حالياً
+            </p>
           </div>
         ) : (
           <div className="relative">

@@ -39,10 +39,10 @@ import { Separator } from "@/components/ui/separator";
 import { Card, CardContent } from "@/components/ui/card";
 import { useState, useEffect, useCallback } from "react";
 import { useCurrency } from "@/contexts/currency-context";
+import { StripeProvider } from "@/app/providers/stripe-provider";
 import { StripePaymentForm } from "../_components/stripe-payment-form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { StripeProvider } from "@/app/providers/stripe-provider";
 
 function CheckoutSummarySkeleton() {
   return (
@@ -1506,11 +1506,7 @@ export default function CheckoutPage() {
                                   <div className="text-xs bg-muted px-2 py-1 rounded">
                                     الكمية: {item.quantity}
                                   </div>
-                                  {item.selectedSize && (
-                                    <div className="text-xs bg-muted px-2 py-1 rounded">
-                                      المقاس: {item.selectedSize}
-                                    </div>
-                                  )}
+
                                   {item.selectedColor && (
                                     <div className="text-xs bg-muted px-2 py-1 rounded flex items-center gap-1">
                                       <span

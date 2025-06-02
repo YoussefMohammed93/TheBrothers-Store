@@ -17,7 +17,6 @@ type CartItem = {
   _id: Id<"cart">;
   productId: Id<"products">;
   quantity: number;
-  selectedSize?: string;
   selectedColor?: string;
   addedAt: string;
   updatedAt: string;
@@ -33,7 +32,6 @@ type CartItem = {
     mainImageUrl: string | null;
     galleryUrls: (string | null)[];
     categoryId: Id<"categories">;
-    sizes: Array<{ name: string; price: number }>;
     colors: Array<{ name: string; value: string }>;
     _creationTime: number;
     createdAt: string;
@@ -63,7 +61,6 @@ type CartContextType = {
   addToCart: (
     productId: Id<"products">,
     quantity?: number,
-    selectedSize?: string,
     selectedColor?: string
   ) => Promise<void>;
   removeFromCart: (cartItemId: Id<"cart">) => Promise<void>;
@@ -144,7 +141,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const addToCart = async (
     productId: Id<"products">,
     quantity = 1,
-    selectedSize?: string,
     selectedColor?: string
   ) => {
     if (!isSignedIn) {
@@ -156,7 +152,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
       await addToCartMutation({
         productId,
         quantity,
-        selectedSize,
         selectedColor,
       });
       toast.success("تمت إضافة المنتج إلى السلة");

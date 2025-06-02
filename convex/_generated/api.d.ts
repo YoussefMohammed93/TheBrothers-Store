@@ -25,6 +25,7 @@ import type * as footer from "../footer.js";
 import type * as header from "../header.js";
 import type * as hero from "../hero.js";
 import type * as http from "../http.js";
+import type * as migrations_removeSizesField from "../migrations/removeSizesField.js";
 import type * as migrations from "../migrations.js";
 import type * as newsletter from "../newsletter.js";
 import type * as orders from "../orders.js";
@@ -57,6 +58,7 @@ declare const fullApi: ApiFromModules<{
   header: typeof header;
   hero: typeof hero;
   http: typeof http;
+  "migrations/removeSizesField": typeof migrations_removeSizesField;
   migrations: typeof migrations;
   newsletter: typeof newsletter;
   orders: typeof orders;

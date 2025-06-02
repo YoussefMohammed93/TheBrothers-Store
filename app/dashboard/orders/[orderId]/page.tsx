@@ -209,11 +209,6 @@ export default function OrderDetailsPage() {
                           <p className="font-medium">{item.product?.name}</p>
                           <div className="text-sm text-muted-foreground">
                             <span>الكمية: {item.quantity}</span>
-                            {item.selectedSize && (
-                              <span className="mx-2">
-                                المقاس: {item.selectedSize}
-                              </span>
-                            )}
                             {item.selectedColor && (
                               <span className="mx-2">
                                 اللون: {item.selectedColor}

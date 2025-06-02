@@ -41,14 +41,11 @@ interface ProductDialogProps {
     price: number;
     discountPercentage: number;
     quantity: number;
-    sizes: string[];
     colors: Array<{ name: string; value: string }>;
     categoryId: Id<"categories">;
     badges: string[];
   };
 }
-
-const AVAILABLE_SIZES = ["XS", "S", "M", "L", "XL", "XXL"];
 const AVAILABLE_COLORS = [
   { name: "أسود", value: "#1a1a1a" },
   { name: "رمادي", value: "#6b7280" },
@@ -78,7 +75,6 @@ export function ProductDialog({
     price: "",
     discountPercentage: "0",
     quantity: "",
-    sizes: [] as { name: string; price: number }[],
     colors: [] as { name: string; value: string }[],
     categoryId: "",
     badges: [] as string[],
@@ -88,7 +84,6 @@ export function ProductDialog({
     name: false,
     price: false,
     quantity: false,
-    sizes: false,
     colors: false,
     categoryId: false,
   });
@@ -105,7 +100,6 @@ export function ProductDialog({
       price: formData.price.trim().length === 0 || Number(formData.price) <= 0,
       quantity:
         formData.quantity.trim().length === 0 || Number(formData.quantity) < 0,
-      sizes: formData.sizes.length === 0,
       colors: formData.colors.length === 0,
       categoryId: formData.categoryId.trim().length === 0,
     };
@@ -134,7 +128,6 @@ export function ProductDialog({
       Number(formData.price) > 0 &&
       formData.quantity.trim().length > 0 &&
       Number(formData.quantity) >= 0 &&
-      formData.sizes.length > 0 &&
       formData.colors.length > 0 &&
       formData.categoryId.trim().length > 0 &&
       hasRequiredImages;
@@ -161,10 +154,6 @@ export function ProductDialog({
         price: initialData.price.toString(),
         discountPercentage: initialData.discountPercentage.toString(),
         quantity: initialData.quantity.toString(),
-        sizes: initialData.sizes.map((size) => ({
-          name: size,
-          price: initialData.price,
-        })),
         colors: initialData.colors,
         categoryId: initialData.categoryId,
         badges: initialData.badges,
@@ -195,7 +184,6 @@ export function ProductDialog({
       price: "",
       discountPercentage: "0",
       quantity: "",
-      sizes: [],
       colors: [],
       categoryId: "",
       badges: [],
@@ -282,7 +270,6 @@ export function ProductDialog({
         price: Number(formData.price),
         discountPercentage: Number(formData.discountPercentage),
         quantity: Number(formData.quantity),
-        sizes: formData.sizes,
         colors: formData.colors,
         categoryId: formData.categoryId as Id<"categories">,
         badges: formData.badges,
@@ -303,34 +290,7 @@ export function ProductDialog({
     }
   };
 
-  const toggleSize = (size: string) => {
-    setFormData((prev) => {
-      const existingSize = prev.sizes.find((s) => s.name === size);
-      if (existingSize) {
-        return {
-          ...prev,
-          sizes: prev.sizes.filter((s) => s.name !== size),
-        };
-      } else {
-        return {
-          ...prev,
-          sizes: [
-            ...prev.sizes,
-            { name: size, price: Number(prev.price) || 0 },
-          ],
-        };
-      }
-    });
-  };
 
-  const updateSizePrice = (sizeName: string, price: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      sizes: prev.sizes.map((s) =>
-        s.name === sizeName ? { ...s, price: Number(price) || 0 } : s
-      ),
-    }));
-  };
 
   const toggleColor = (color: { name: string; value: string }) => {
     setFormData((prev) => ({
@@ -496,46 +456,6 @@ export function ProductDialog({
                   ))}
                 </SelectContent>
               </Select>
-            </div>
-            <div className="col-span-2 space-y-3">
-              <label className="text-sm font-medium block">
-                المقاسات المتوفرة
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                {AVAILABLE_SIZES.map((size) => (
-                  <div
-                    key={size}
-                    className="flex flex-col bg-secondary/20 rounded-lg p-2 hover:bg-secondary/30 transition-colors"
-                  >
-                    <div className="flex items-center mb-2">
-                      <Checkbox
-                        id={`size-${size}`}
-                        className="ml-2 size-5"
-                        checked={formData.sizes.some((s) => s.name === size)}
-                        onCheckedChange={() => toggleSize(size)}
-                      />
-                      <label
-                        htmlFor={`size-${size}`}
-                        className="text-sm font-medium leading-none cursor-pointer flex-1 mt-1"
-                      >
-                        {size}
-                      </label>
-                    </div>
-                    {formData.sizes.some((s) => s.name === size) && (
-                      <Input
-                        type="number"
-                        placeholder="السعر"
-                        value={
-                          formData.sizes.find((s) => s.name === size)?.price ||
-                          ""
-                        }
-                        onChange={(e) => updateSizePrice(size, e.target.value)}
-                        className="mt-2"
-                      />
-                    )}
-                  </div>
-                ))}
-              </div>
             </div>
             <div className="col-span-2 space-y-3">
               <label className="text-sm font-medium block">

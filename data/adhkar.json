@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "text": "اللهم صل على محمد وعلى آل محمد",
+    "category": "salawat"
+  },
+  {
+    "id": 2,
+    "text": "سبحان الله",
+    "category": "tasbih"
+  },
+  {
+    "id": 3,
+    "text": "الحمد لله",
+    "category": "tahmid"
+  },
+  {
+    "id": 4,
+    "text": "الله أكبر",
+    "category": "takbir"
+  },
+  {
+    "id": 5,
+    "text": "لا إله إلا الله",
+    "category": "tahlil"
+  },
+  {
+    "id": 6,
+    "text": "أستغفر الله",
+    "category": "istighfar"
+  },
+  {
+    "id": 7,
+    "text": "لا حول ولا قوة إلا بالله",
+    "category": "hawqala"
+  },
+  {
+    "id": 8,
+    "text": "سبحان الله وبحمده",
+    "category": "tasbih"
+  },
+  {
+    "id": 9,
+    "text": "سبحان الله العظيم",
+    "category": "tasbih"
+  },
+  {
+    "id": 10,
+    "text": "بسم الله الرحمن الرحيم",
+    "category": "basmala"
+  },
+  {
+    "id": 11,
+    "text": "رب اغفر لي",
+    "category": "dua"
+  },
+  {
+    "id": 12,
+    "text": "اللهم صل على سيدنا محمد وعلى آل سيدنا محمد",
+    "category": "salawat"
+  },
+  {
+    "id": 13,
+    "text": "حسبنا الله ونعم الوكيل",
+    "category": "dua"
+  },
+  {
+    "id": 14,
+    "text": "ما شاء الله لا قوة إلا بالله",
+    "category": "dua"
+  }
+]

@@ -71,7 +71,6 @@ export const addToCart = mutation({
   args: {
     productId: v.id("products"),
     quantity: v.number(),
-    selectedSize: v.optional(v.string()),
     selectedColor: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
@@ -80,11 +79,6 @@ export const addToCart = mutation({
     const product = await ctx.db.get(args.productId);
     if (!product) {
       throw new Error("Product not found");
-    }
-
-    let finalSelectedSize = args.selectedSize;
-    if (!finalSelectedSize && product.sizes.length > 0) {
-      finalSelectedSize = product.sizes[0].name;
     }
 
     let finalSelectedColor = args.selectedColor;
@@ -104,7 +98,6 @@ export const addToCart = mutation({
     if (existing) {
       return await ctx.db.patch(existing._id, {
         quantity: existing.quantity + args.quantity,
-        selectedSize: finalSelectedSize || existing.selectedSize,
         selectedColor: finalSelectedColor || existing.selectedColor,
         updatedAt: now,
       });
@@ -114,7 +107,6 @@ export const addToCart = mutation({
       userId: user._id,
       productId: args.productId,
       quantity: args.quantity,
-      selectedSize: finalSelectedSize,
       selectedColor: finalSelectedColor,
       addedAt: now,
       updatedAt: now,

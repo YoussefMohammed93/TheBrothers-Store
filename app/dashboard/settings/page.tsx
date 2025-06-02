@@ -13,6 +13,7 @@ import {
   TruckIcon,
   Save,
   ImageIcon,
+  BookOpenIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
@@ -52,8 +53,8 @@ import { api } from "@/convex/_generated/api";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Id } from "@/convex/_generated/dataModel";
 import { Heading } from "@/components/ui/heading";
+import { Id } from "@/convex/_generated/dataModel";
 import { useQuery, useMutation } from "convex/react";
 import { Upload, EyeIcon, EyeOffIcon } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -86,6 +87,9 @@ export default function SettingsPage() {
   const [storeEmail, setStoreEmail] = useState("");
   const [storeAddress, setStoreAddress] = useState("");
 
+  const [adhkarEnabled, setAdhkarEnabled] = useState(false);
+  const [adhkarInterval, setAdhkarInterval] = useState("5");
+
   const [originalValues, setOriginalValues] = useState({
     shippingCost: "",
     freeShippingThreshold: "",
@@ -95,6 +99,8 @@ export default function SettingsPage() {
     storeAddress: "",
     defaultCurrency: "",
     showLogo: true,
+    adhkarEnabled: false,
+    adhkarInterval: "5",
   });
 
   const { currency, setCurrency } = useCurrency();
@@ -115,6 +121,8 @@ export default function SettingsPage() {
       setStorePhone(storePhoneValue);
       setStoreEmail(storeEmailValue);
       setStoreAddress(storeAddressValue);
+      setAdhkarEnabled(settings.adhkarEnabled ?? false);
+      setAdhkarInterval(settings.adhkarInterval?.toString() ?? "5");
 
       setOriginalValues({
         shippingCost: shippingCostValue,
@@ -125,6 +133,8 @@ export default function SettingsPage() {
         storeAddress: storeAddressValue,
         defaultCurrency: settings.defaultCurrency || currency.code,
         showLogo: settings.showLogo ?? true,
+        adhkarEnabled: settings.adhkarEnabled ?? false,
+        adhkarInterval: settings.adhkarInterval?.toString() ?? "5",
       });
     }
   }, [settings, currency.code]);
@@ -144,6 +154,8 @@ export default function SettingsPage() {
       storeAddress !== originalValues.storeAddress ||
       currency.code !== originalValues.defaultCurrency ||
       showLogo !== originalValues.showLogo ||
+      adhkarEnabled !== originalValues.adhkarEnabled ||
+      adhkarInterval !== originalValues.adhkarInterval ||
       logoFile !== null ||
       logoToDelete !== null
     );
@@ -198,6 +210,8 @@ export default function SettingsPage() {
         storeAddress,
         logo: logoId,
         showLogo,
+        adhkarEnabled,
+        adhkarInterval: Number(adhkarInterval) || 5,
       });
 
       setLogoFile(null);
@@ -902,6 +916,64 @@ export default function SettingsPage() {
                   اتركها فارغة لتعطيل الشحن المجاني
                 </p>
               </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2 mb-1">
+              <BookOpenIcon className="h-5 w-5 text-primary" />
+              <h2 className="text-lg font-semibold">إعدادات الأذكار</h2>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              تحكم في عرض الأذكار الإسلامية للمستخدمين
+            </p>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <label className="text-sm font-medium">تفعيل الأذكار</label>
+                  <p className="text-sm text-muted-foreground">
+                    عرض الأذكار الإسلامية للمستخدمين في جميع الصفحات
+                  </p>
+                </div>
+                <Button
+                  type="button"
+                  variant={adhkarEnabled ? "default" : "outline"}
+                  onClick={() => setAdhkarEnabled(!adhkarEnabled)}
+                  className="gap-2"
+                >
+                  {adhkarEnabled ? "مفعل" : "معطل"}
+                </Button>
+              </div>
+              {adhkarEnabled && (
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">
+                    فترة عرض الأذكار (بالدقائق)
+                  </label>
+                  <Select
+                    value={adhkarInterval}
+                    onValueChange={setAdhkarInterval}
+                  >
+                    <SelectTrigger className="w-[200px]">
+                      <SelectValue placeholder="اختر الفترة" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">كل دقيقة</SelectItem>
+                      <SelectItem value="2">كل دقيقتين</SelectItem>
+                      <SelectItem value="3">كل 3 دقائق</SelectItem>
+                      <SelectItem value="4">كل 4 دقائق</SelectItem>
+                      <SelectItem value="5">كل 5 دقائق</SelectItem>
+                      <SelectItem value="10">كل 10 دقائق</SelectItem>
+                      <SelectItem value="15">كل 15 دقيقة</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <p className="text-sm text-muted-foreground">
+                    سيتم عرض ذكر عشوائي كل {adhkarInterval} دقيقة/دقائق
+                  </p>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>

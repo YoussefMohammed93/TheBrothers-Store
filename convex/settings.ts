@@ -38,6 +38,8 @@ export const save = mutation({
     storeAddress: v.optional(v.string()),
     logo: v.optional(v.id("_storage")),
     showLogo: v.optional(v.boolean()),
+    adhkarEnabled: v.optional(v.boolean()),
+    adhkarInterval: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
     const existing = await ctx.db.query("settings").first();

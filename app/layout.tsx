@@ -6,6 +6,7 @@ import { api } from "@/convex/_generated/api";
 import { Toaster } from "@/components/ui/sonner";
 import { ConvexHttpClient } from "convex/browser";
 import { CartProvider } from "@/contexts/cart-context";
+import { AdhkarProvider } from "@/contexts/adhkar-context";
 import { StripeProvider } from "./providers/stripe-provider";
 import { WishlistProvider } from "@/contexts/wishlist-context";
 import { CurrencyProvider } from "@/contexts/currency-context";
@@ -66,14 +67,16 @@ export default function RootLayout({
               <WishlistProvider>
                 <CartProvider>
                   <StripeProvider>
-                    <ViewTracker />
-                    {children}
-                    <Toaster
-                      richColors
-                      closeButton
-                      position="bottom-right"
-                      dir="rtl"
-                    />
+                    <AdhkarProvider>
+                      <ViewTracker />
+                      {children}
+                      <Toaster
+                        richColors
+                        closeButton
+                        position="bottom-right"
+                        dir="rtl"
+                      />
+                    </AdhkarProvider>
                   </StripeProvider>
                 </CartProvider>
               </WishlistProvider>

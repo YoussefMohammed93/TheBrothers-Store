@@ -207,7 +207,7 @@ export const createOrder = mutation({
           productName: item!.product.name,
           productPrice: item!.itemPrice,
           quantity: item!.quantity,
-          selectedSize: item!.selectedSize,
+          selectedSize: undefined,
           selectedColor: item!.selectedColor,
           total: item!.itemTotal,
         });

@@ -69,8 +69,8 @@ import { ProductDialog } from "./product-dialog";
 import { Heading } from "@/components/ui/heading";
 import { Id } from "@/convex/_generated/dataModel";
 import { Separator } from "@/components/ui/separator";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useCurrency } from "@/contexts/currency-context";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface Product {
   _id: string;
@@ -83,7 +83,6 @@ interface Product {
   price: number;
   discountPercentage: number;
   quantity: number;
-  sizes: string[];
   colors: Array<{
     name: string;
     value: string;
@@ -204,6 +203,11 @@ export default function ProductsPage() {
   const products = useQuery(api.products.getProducts);
   const categories = useQuery(api.categories.getCategories);
   const deleteProductMutation = useMutation(api.products.deleteProduct);
+
+  // Debug logging
+  console.log("Dashboard - Products data:", products);
+  console.log("Dashboard - Products length:", products?.length);
+  console.log("Dashboard - Categories data:", categories);
 
   const handleDeleteProduct = async () => {
     if (!deletingProduct) return;
@@ -549,7 +553,7 @@ export default function ProductsPage() {
                             (url: string | undefined | null): url is string =>
                               url !== undefined && url !== null
                           ) ?? [],
-                        sizes: product.sizes.map((size) => size.name),
+
                       })
                     }
                   >
@@ -568,7 +572,7 @@ export default function ProductsPage() {
                             (url: string | undefined | null): url is string =>
                               url !== undefined && url !== null
                           ) ?? [],
-                        sizes: product.sizes.map((size) => size.name),
+
                       })
                     }
                   >
@@ -587,7 +591,7 @@ export default function ProductsPage() {
                             (url: string | undefined | null): url is string =>
                               url !== undefined && url !== null
                           ) ?? [],
-                        sizes: product.sizes.map((size) => size.name),
+
                       });
                       setShowDeleteDialog(true);
                     }}
@@ -759,37 +763,6 @@ export default function ProductsPage() {
                   </div>
                   <Separator />
                   <div className="space-y-4">
-                    <div>
-                      <Label>المقاسات والأسعار</Label>
-                      <div className="grid gap-2 mt-2">
-                        {previewProduct.sizes.map((size) => (
-                          <div
-                            key={size}
-                            className="flex items-center justify-between p-2 border rounded"
-                          >
-                            <Badge variant="outline">{size}</Badge>
-                            <div className="flex items-center gap-2">
-                              <span className="text-muted-foreground line-through">
-                                {formatPrice(previewProduct.price)}
-                              </span>
-                              {previewProduct.discountPercentage > 0 && (
-                                <>
-                                  <span className="font-semibold text-primary">
-                                    {formatPrice(
-                                      previewProduct.price *
-                                        (1 -
-                                          (previewProduct.discountPercentage ||
-                                            0) /
-                                            100)
-                                    )}
-                                  </span>
-                                </>
-                              )}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
                     <div>
                       <Label>الألوان المتوفرة</Label>
                       <div className="flex flex-wrap gap-3 mt-2">

@@ -21,7 +21,7 @@ type CartItemProps = {
       colors: Array<{ name: string; value: string }>;
     };
     quantity: number;
-    selectedSize?: string;
+
     selectedColor?: string;
   };
   formatPrice: (amount: number) => string;
@@ -80,11 +80,6 @@ const CartItem = memo(function CartItem({
                 {item.product.description}
               </p>
               <div className="flex flex-wrap gap-2 mb-2">
-                {item.selectedSize && (
-                  <div className="text-sm bg-muted px-2 py-1 rounded">
-                    المقاس: {item.selectedSize}
-                  </div>
-                )}
                 {item.selectedColor && (
                   <div className="text-sm bg-muted px-2 py-1 rounded flex items-center gap-2">
                     اللون: {item.selectedColor}

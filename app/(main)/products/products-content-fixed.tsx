@@ -29,10 +29,10 @@ import { api } from "@/convex/_generated/api";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Search, FilterIcon } from "lucide-react";
-import { ProductCard } from "@/components/ui/product-card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useCurrency } from "@/contexts/currency-context";
+import { ProductCard } from "@/components/ui/product-card"; 
 import ProductsSkeleton, { EmptyState } from "./products-skeleton";
 
 const ITEMS_PER_PAGE = 9;
@@ -89,9 +89,9 @@ export default function ProductsContent() {
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("الكل");
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
-  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
   const { visibleProducts, registerProduct } = useIntersectionObserver();
@@ -103,6 +103,8 @@ export default function ProductsContent() {
   const productRatings = useQuery(api.reviews.getProductsRatings, {
     productIds: products?.map((product) => product._id) || [],
   });
+
+
 
   const colors = useMemo(
     () => [
@@ -116,7 +118,7 @@ export default function ProductsContent() {
     []
   );
 
-  const sizes = useMemo(() => ["XS", "S", "M", "L", "XL", "XXL"], []);
+
 
   const statusOptions = useMemo(
     () => [
@@ -166,19 +168,14 @@ export default function ProductsContent() {
           product.colors.some((color) => color.name === colorName)
         );
 
-      const matchesSizes =
-        selectedSizes.length === 0 ||
-        selectedSizes.some((size) =>
-          product.sizes.some((productSize) => productSize.name === size)
-        );
+
 
       return (
         matchesStatus &&
         matchesSearch &&
         matchesCategory &&
         matchesPrice &&
-        matchesColors &&
-        matchesSizes
+        matchesColors
       );
     });
   }, [
@@ -189,7 +186,6 @@ export default function ProductsContent() {
     categoriesData,
     priceRange,
     selectedColors,
-    selectedSizes,
   ]);
 
   const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
@@ -252,7 +248,7 @@ export default function ProductsContent() {
           <h3 className="font-semibold mb-3">نطاق السعر</h3>
           <Slider
             defaultValue={priceRange}
-            max={1000}
+            max={5000}
             min={0}
             step={1}
             className="mb-2"
@@ -294,34 +290,11 @@ export default function ProductsContent() {
             ))}
           </div>
         </div>
-        <div>
-          <h3 className="font-semibold mb-3">المقاسات</h3>
-          <div className="grid grid-cols-3 gap-2">
-            {sizes.map((size) => (
-              <Button
-                key={size}
-                variant={selectedSizes.includes(size) ? "default" : "outline"}
-                size="sm"
-                className="w-full"
-                onClick={() => {
-                  setSelectedSizes((prev) =>
-                    prev.includes(size)
-                      ? prev.filter((s) => s !== size)
-                      : [...prev, size]
-                  );
-                  setCurrentPage(1);
-                }}
-              >
-                {size}
-              </Button>
-            ))}
-          </div>
-        </div>
+
         {(selectedCategory !== "الكل" ||
           priceRange[0] !== 0 ||
-          priceRange[1] !== 1000 ||
+          priceRange[1] !== 5000 ||
           selectedColors.length > 0 ||
-          selectedSizes.length > 0 ||
           selectedStatus !== "all" ||
           searchQuery) && (
           <Button
@@ -329,9 +302,8 @@ export default function ProductsContent() {
             className="w-full"
             onClick={() => {
               setSelectedCategory("الكل");
-              setPriceRange([0, 1000]);
+              setPriceRange([0, 5000]);
               setSelectedColors([]);
-              setSelectedSizes([]);
               setSelectedStatus("all");
               setSearchQuery("");
               setCurrentPage(1);
@@ -348,17 +320,14 @@ export default function ProductsContent() {
       selectedCategory,
       priceRange,
       selectedColors,
-      selectedSizes,
       selectedStatus,
       searchQuery,
       colors,
-      sizes,
       currency,
       setSelectedCategory,
       setCurrentPage,
       setPriceRange,
       setSelectedColors,
-      setSelectedSizes,
       setSelectedStatus,
       setSearchQuery,
       setIsMobileFiltersOpen,
@@ -376,7 +345,6 @@ export default function ProductsContent() {
         category: string;
         priceRange: [number, number];
         colors: string[];
-        sizes: string[];
       };
       onClear: () => void;
     }) => {
@@ -393,16 +361,13 @@ export default function ProductsContent() {
       if (filters.category !== "الكل") {
         activeFilters.push(`الفئة: "${filters.category}"`);
       }
-      if (filters.priceRange[0] !== 0 || filters.priceRange[1] !== 1000) {
+      if (filters.priceRange[0] !== 0 || filters.priceRange[1] !== 5000) {
         activeFilters.push(
           `السعر: ${filters.priceRange[0]} - ${filters.priceRange[1]} ر.س`
         );
       }
       if (filters.colors.length > 0) {
         activeFilters.push(`الألوان: ${filters.colors.join("، ")}`);
-      }
-      if (filters.sizes.length > 0) {
-        activeFilters.push(`المقاسات: ${filters.sizes.join("، ")}`);
       }
 
       return (
@@ -538,12 +503,10 @@ export default function ProductsContent() {
           <FilterIcon className="h-4 w-4 ml-2" />
           تصفية المنتجات
           {(selectedCategory !== "الكل" ||
-            selectedColors.length > 0 ||
-            selectedSizes.length > 0) && (
+            selectedColors.length > 0) && (
             <span className="inline-flex items-center justify-center w-5 h-5 ml-2 text-xs font-medium text-white bg-primary rounded-full">
               {(selectedCategory !== "الكل" ? 1 : 0) +
-                selectedColors.length +
-                selectedSizes.length}
+                selectedColors.length}
             </span>
           )}
         </Button>
@@ -635,13 +598,11 @@ export default function ProductsContent() {
                 category: selectedCategory,
                 priceRange,
                 colors: selectedColors,
-                sizes: selectedSizes,
               }}
               onClear={() => {
                 setSelectedCategory("الكل");
-                setPriceRange([0, 1000]);
+                setPriceRange([0, 5000]);
                 setSelectedColors([]);
-                setSelectedSizes([]);
                 setSelectedStatus("all");
                 setSearchQuery("");
                 setCurrentPage(1);

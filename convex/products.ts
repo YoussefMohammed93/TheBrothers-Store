@@ -5,7 +5,7 @@ import { mutation, query } from "./_generated/server";
 // Get all products with their images URLs
 export const getProducts = query({
   handler: async (ctx) => {
-    const products = await ctx.db.query("products").order("desc").collect();
+    const products = await ctx.db.query("products").withIndex("by_created").order("desc").collect();
 
     const batchSize = 10;
     const result = [];
@@ -140,12 +140,6 @@ export const saveProduct = mutation({
     price: v.number(),
     discountPercentage: v.number(),
     quantity: v.number(),
-    sizes: v.array(
-      v.object({
-        name: v.string(),
-        price: v.number(),
-      })
-    ),
     colors: v.array(
       v.object({
         name: v.string(),
@@ -159,25 +153,15 @@ export const saveProduct = mutation({
     const { id, ...productData } = args;
     const now = new Date().toISOString();
 
-    const sortedSizes = [...productData.sizes].sort((a, b) => {
-      const sizeOrder = ["XS", "S", "M", "L", "XL", "XXL"];
-      return sizeOrder.indexOf(a.name) - sizeOrder.indexOf(b.name);
-    });
-
-    const mainPrice =
-      sortedSizes.length > 0 ? sortedSizes[0].price : productData.price;
-
     if (id) {
       return await ctx.db.patch(id, {
         ...productData,
-        price: mainPrice,
         updatedAt: now,
       });
     }
 
     return await ctx.db.insert("products", {
       ...productData,
-      price: mainPrice,
       createdAt: now,
       updatedAt: now,
     });

@@ -94,12 +94,7 @@ export default defineSchema({
     price: v.number(),
     discountPercentage: v.number(),
     quantity: v.number(),
-    sizes: v.array(
-      v.object({
-        name: v.string(),
-        price: v.number(),
-      })
-    ),
+
     colors: v.array(
       v.object({
         name: v.string(),
@@ -241,7 +236,6 @@ export default defineSchema({
     userId: v.id("users"),
     productId: v.id("products"),
     quantity: v.number(),
-    selectedSize: v.optional(v.string()),
     selectedColor: v.optional(v.string()),
     addedAt: v.string(),
     updatedAt: v.string(),
@@ -270,6 +264,8 @@ export default defineSchema({
     storeAddress: v.optional(v.string()),
     logo: v.optional(v.id("_storage")),
     showLogo: v.optional(v.boolean()),
+    adhkarEnabled: v.optional(v.boolean()),
+    adhkarInterval: v.optional(v.number()),
   }),
 
   footer: defineTable({
