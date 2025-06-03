@@ -1,13 +1,7 @@
 "use client";
 
 import { toast } from "sonner";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 
 import {
   Dialog,
@@ -49,6 +43,7 @@ import { useCurrency } from "@/contexts/currency-context";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useState, useRef, useEffect, useMemo } from "react";
 import { ProductImage } from "@/components/ui/product-image";
+import { ImageZoomModal } from "@/components/ui/image-zoom-modal";
 import { Loader2, Minus, Plus, Heart, ShoppingCart } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -69,12 +64,7 @@ interface ReviewCardProps {
   isCurrentUserReview: boolean;
 }
 
-const ReviewCard = ({
-  review,
-  onDelete,
-  onEdit,
-  isCurrentUserReview,
-}: ReviewCardProps) => {
+const ReviewCard = ({ review, onDelete, onEdit, isCurrentUserReview }: ReviewCardProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -109,37 +99,20 @@ const ReviewCard = ({
         <CardContent className="p-3">
           <div className="flex flex-col sm:flex-row sm:items-start gap-4">
             <Avatar className="hidden sm:block h-12 w-12 border-2 border-primary/10 self-start">
-              <AvatarImage
-                src={review.userImage}
-                alt={review.userName}
-                loading="lazy"
-              />
-              <AvatarFallback className="bg-primary/5">
-                {review.userName.slice(0, 2)}
-              </AvatarFallback>
+              <AvatarImage src={review.userImage} alt={review.userName} loading="lazy" />
+              <AvatarFallback className="bg-primary/5">{review.userName.slice(0, 2)}</AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
                 <Avatar className="sm:hidden h-12 w-12 border-2 border-primary/10 self-start">
-                  <AvatarImage
-                    src={review.userImage}
-                    alt={review.userName}
-                    loading="lazy"
-                  />
-                  <AvatarFallback className="bg-primary/5">
-                    {review.userName.slice(0, 2)}
-                  </AvatarFallback>
+                  <AvatarImage src={review.userImage} alt={review.userName} loading="lazy" />
+                  <AvatarFallback className="bg-primary/5">{review.userName.slice(0, 2)}</AvatarFallback>
                 </Avatar>
                 <div className="w-full flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-0">
                   <div>
                     <div className="flex sm:items-center flex-col sm:flex-row flex-wrap gap-2">
-                      <h3 className="font-semibold text-base sm:text-lg">
-                        {review.userName}
-                      </h3>
-                      <Badge
-                        variant="outline"
-                        className="text-xs whitespace-nowrap"
-                      >
+                      <h3 className="font-semibold text-base sm:text-lg">{review.userName}</h3>
+                      <Badge variant="outline" className="text-xs whitespace-nowrap">
                         <Calendar className="mr-1 h-3 w-3" />
                         {new Date(review.createdAt).toLocaleDateString("ar-SA")}
                       </Badge>
@@ -149,9 +122,7 @@ const ReviewCard = ({
                         <StarIcon
                           key={i}
                           className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${
-                            i < review.rating
-                              ? "text-amber-500 fill-amber-500"
-                              : "text-gray-300"
+                            i < review.rating ? "text-amber-500 fill-amber-500" : "text-gray-300"
                           }`}
                         />
                       ))}
@@ -199,10 +170,7 @@ const ReviewCard = ({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>إلغاء</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDelete}
-              className="bg-destructive hover:bg-destructive/90"
-            >
+            <AlertDialogAction onClick={handleDelete} className="bg-destructive hover:bg-destructive/90">
               {isDeleting ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -219,9 +187,7 @@ const ReviewCard = ({
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>تعديل التقييم</DialogTitle>
-            <DialogDescription>
-              قم بتعديل تقييمك وتعليقك على المنتج
-            </DialogDescription>
+            <DialogDescription>قم بتعديل تقييمك وتعليقك على المنتج</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div>
@@ -240,11 +206,7 @@ const ReviewCard = ({
                     >
                       <StarIcon
                         className={`h-6 w-6 transition-colors ${
-                          (
-                            hoveredRating
-                              ? hoveredRating >= starValue
-                              : editedRating >= starValue
-                          )
+                          (hoveredRating ? hoveredRating >= starValue : editedRating >= starValue)
                             ? "text-amber-500 fill-amber-500"
                             : "text-gray-300"
                         }`}
@@ -253,9 +215,7 @@ const ReviewCard = ({
                   );
                 })}
                 {editedRating > 0 && (
-                  <span className="text-sm text-muted-foreground mr-2 mt-1">
-                    ({editedRating} من 5)
-                  </span>
+                  <span className="text-sm text-muted-foreground mr-2 mt-1">({editedRating} من 5)</span>
                 )}
               </div>
             </div>
@@ -270,11 +230,7 @@ const ReviewCard = ({
             </div>
           </div>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setShowEditDialog(false)}
-              disabled={isEditing}
-            >
+            <Button variant="outline" onClick={() => setShowEditDialog(false)} disabled={isEditing}>
               إلغاء
             </Button>
             <Button onClick={handleEdit} disabled={isEditing}>
@@ -314,9 +270,7 @@ export default function ProductPage() {
     );
   }
 
-  return (
-    <ProductDetails product={product} productId={productId as Id<"products">} />
-  );
+  return <ProductDetails product={product} productId={productId as Id<"products">} />;
 }
 
 interface ProductType {
@@ -337,13 +291,7 @@ interface ProductType {
   updatedAt: string;
 }
 
-function ProductDetails({
-  product,
-  productId,
-}: {
-  product: ProductType;
-  productId: Id<"products">;
-}) {
+function ProductDetails({ product, productId }: { product: ProductType; productId: Id<"products"> }) {
   const category = useQuery(api.categories.getCategory, {
     categoryId: product?.categoryId as Id<"categories">,
   });
@@ -357,7 +305,6 @@ function ProductDetails({
   const addReviewMutation = useMutation(api.reviews.addReview);
   const deleteReviewMutation = useMutation(api.reviews.deleteReview);
 
-
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -368,6 +315,8 @@ function ProductDetails({
   const [hoveredRating, setHoveredRating] = useState(0);
   const [comment, setComment] = useState("");
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+  const [isZoomModalOpen, setIsZoomModalOpen] = useState(false);
+  const [currentZoomImageIndex, setCurrentZoomImageIndex] = useState(0);
 
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const { addToCart, isProductInCart } = useCart();
@@ -386,13 +335,56 @@ function ProductDetails({
     return selectedImage || product?.mainImageUrl || "/placeholder-product.jpg";
   }, [selectedImage, product?.mainImageUrl]);
 
+  // Create images array for zoom modal
+  const allImages = useMemo(() => {
+    if (!product) return [];
+
+    const images = [];
+
+    // Add main image
+    if (product.mainImageUrl) {
+      images.push({
+        src: product.mainImageUrl,
+        alt: product.name,
+      });
+    }
+
+    // Add gallery images
+    if (product.galleryUrls) {
+      product.galleryUrls.forEach((url, index) => {
+        if (url) {
+          images.push({
+            src: url,
+            alt: `${product.name} - ${index + 1}`,
+          });
+        }
+      });
+    }
+
+    return images;
+  }, [product]);
+
+  // Handle zoom modal
+  const handleImageClick = () => {
+    const currentImageSrc = mainImageToShow;
+    const imageIndex = allImages.findIndex((img) => img.src === currentImageSrc);
+    setCurrentZoomImageIndex(imageIndex >= 0 ? imageIndex : 0);
+    setIsZoomModalOpen(true);
+  };
+
+  const handleZoomModalClose = () => {
+    setIsZoomModalOpen(false);
+  };
+
+  const handleZoomImageChange = (index: number) => {
+    setCurrentZoomImageIndex(index);
+  };
+
   useEffect(() => {
     const checkIfClamped = () => {
       if (descriptionRef.current) {
         const element = descriptionRef.current;
-        setIsTextClamped(
-          !isExpanded && element.scrollHeight > element.clientHeight
-        );
+        setIsTextClamped(!isExpanded && element.scrollHeight > element.clientHeight);
       }
     };
 
@@ -429,17 +421,12 @@ function ProductDetails({
         "@type": "Offer",
         price: discountedPrice,
         priceCurrency: "SAR",
-        availability:
-          product.quantity > 0
-            ? "https://schema.org/InStock"
-            : "https://schema.org/OutOfStock",
+        availability: product.quantity > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       },
       ...(reviews.length > 0 && {
         aggregateRating: {
           "@type": "AggregateRating",
-          ratingValue:
-            reviews.reduce((acc, review) => acc + review.rating, 0) /
-            reviews.length,
+          ratingValue: reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length,
           reviewCount: reviews.length,
         },
       }),
@@ -509,12 +496,11 @@ function ProductDetails({
                     alt={product.name}
                     priority={true}
                     className="p-2 sm:p-4"
+                    showZoomIcon={true}
+                    onImageClick={handleImageClick}
                   />
                   {product.discountPercentage > 0 && (
-                    <Badge
-                      variant="destructive"
-                      className="absolute top-2 sm:top-4 right-2 sm:right-4"
-                    >
+                    <Badge variant="destructive" className="absolute top-2 sm:top-4 right-2 sm:right-4">
                       خصم {product.discountPercentage}%
                     </Badge>
                   )}
@@ -550,9 +536,7 @@ function ProductDetails({
                     <Heart
                       className={cn(
                         "h-4 w-4 sm:h-5 sm:w-5",
-                        isWishlisted
-                          ? "fill-primary text-primary"
-                          : "text-muted-foreground"
+                        isWishlisted ? "fill-primary text-primary" : "text-muted-foreground"
                       )}
                     />
                   </Button>
@@ -566,14 +550,27 @@ function ProductDetails({
                         src={product.mainImageUrl ?? "/placeholder-product.jpg"}
                         alt={product.name}
                         className={`p-1.5 rounded-md cursor-pointer hover:opacity-80 transition ${
-                          !selectedImage
-                            ? "border-2 border-primary"
-                            : "border-2 border-transparent"
+                          !selectedImage ? "border-2 border-primary" : "border-2 border-transparent"
                         }`}
+                        showZoomIcon={true}
+                        onImageClick={() => {
+                          const mainImageIndex = allImages.findIndex(
+                            (img) => img.src === product.mainImageUrl
+                          );
+                          setCurrentZoomImageIndex(mainImageIndex >= 0 ? mainImageIndex : 0);
+                          setIsZoomModalOpen(true);
+                        }}
                       />
                       <div
                         className="absolute inset-0 cursor-pointer"
-                        onClick={() => setSelectedImage(null)}
+                        onClick={() => {
+                          setSelectedImage(null);
+                          // Update zoom modal to show main image
+                          const mainImageIndex = allImages.findIndex(
+                            (img) => img.src === product.mainImageUrl
+                          );
+                          setCurrentZoomImageIndex(mainImageIndex >= 0 ? mainImageIndex : 0);
+                        }}
                         aria-label="View main product image"
                       />
                     </div>
@@ -585,15 +582,24 @@ function ProductDetails({
                           src={url || "/placeholder-product.jpg"}
                           alt={`${product.name} - ${index + 1}`}
                           className={`p-1.5 rounded-md cursor-pointer hover:opacity-80 transition ${
-                            selectedImage === url
-                              ? "border-2 border-primary"
-                              : "border-2 border-transparent"
+                            selectedImage === url ? "border-2 border-primary" : "border-2 border-transparent"
                           }`}
                           priority={index < 2}
+                          showZoomIcon={true}
+                          onImageClick={() => {
+                            const galleryImageIndex = allImages.findIndex((img) => img.src === url);
+                            setCurrentZoomImageIndex(galleryImageIndex >= 0 ? galleryImageIndex : 0);
+                            setIsZoomModalOpen(true);
+                          }}
                         />
                         <div
                           className="absolute inset-0 cursor-pointer"
-                          onClick={() => setSelectedImage(url)}
+                          onClick={() => {
+                            setSelectedImage(url);
+                            // Update zoom modal to show selected gallery image
+                            const galleryImageIndex = allImages.findIndex((img) => img.src === url);
+                            setCurrentZoomImageIndex(galleryImageIndex >= 0 ? galleryImageIndex : 0);
+                          }}
                           aria-label={`View product image ${index + 1}`}
                         />
                       </div>
@@ -604,9 +610,7 @@ function ProductDetails({
             </div>
             <div className="space-y-6 flex-1">
               <div>
-                <h1 className="text-2xl sm:text-3xl font-bold">
-                  {product.name}
-                </h1>
+                <h1 className="text-2xl sm:text-3xl font-bold">{product.name}</h1>
                 <p className="text-justify text-sm sm:text-base text-muted-foreground mt-2">
                   {product.description}
                 </p>
@@ -626,9 +630,7 @@ function ProductDetails({
                   variant="secondary"
                   className={cn(
                     "text-xs sm:text-sm px-4",
-                    product.quantity > 0
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
+                    product.quantity > 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
                   )}
                 >
                   {product.quantity > 0 ? "متوفر" : "غير متوفر"}
@@ -683,9 +685,7 @@ function ProductDetails({
                     size="icon"
                     onClick={() => {
                       if (quantity >= product.quantity) {
-                        toast.warning(
-                          `عذراً، المتوفر في المخزون ${product.quantity} قطعة فقط`
-                        );
+                        toast.warning(`عذراً، المتوفر في المخزون ${product.quantity} قطعة فقط`);
                         return;
                       }
                       setQuantity(quantity + 1);
@@ -701,27 +701,13 @@ function ProductDetails({
                   className="w-full sm:flex-1 gap-2 py-5 sm:py-6"
                   onClick={(e) => {
                     e.preventDefault();
-                    addToCart(
-                      product._id,
-                      quantity,
-                      selectedColor
-                    );
+                    addToCart(product._id, quantity, selectedColor);
                   }}
-                  variant={
-                    isInCart
-                      ? "secondary"
-                      : isOutOfStock
-                        ? "destructive"
-                        : "default"
-                  }
+                  variant={isInCart ? "secondary" : isOutOfStock ? "destructive" : "default"}
                   disabled={isInCart || isOutOfStock}
                 >
                   <ShoppingCart className="h-4 w-4" />
-                  {isInCart
-                    ? "في السلة"
-                    : isOutOfStock
-                      ? "نفذ المنتج"
-                      : "إضافة للسلة"}
+                  {isInCart ? "في السلة" : isOutOfStock ? "نفذ المنتج" : "إضافة للسلة"}
                 </Button>
                 <Button
                   variant="outline"
@@ -735,19 +721,12 @@ function ProductDetails({
                     }
                   }}
                 >
-                  <Heart
-                    className={cn(
-                      "h-4 w-4",
-                      isWishlisted ? "fill-primary text-primary" : ""
-                    )}
-                  />
+                  <Heart className={cn("h-4 w-4", isWishlisted ? "fill-primary text-primary" : "")} />
                   {isWishlisted ? "إزالة من المفضلة" : "إضافة للمفضلة"}
                 </Button>
               </div>
               <div className="space-y-3 sm:space-y-4 mt-6">
-                <h2 className="text-lg sm:text-xl font-semibold">
-                  تفاصيل المنتج
-                </h2>
+                <h2 className="text-lg sm:text-xl font-semibold">تفاصيل المنتج</h2>
                 <div className="space-y-2">
                   <div className="flex flex-wrap gap-1.5 sm:gap-2">
                     <Badge
@@ -777,11 +756,7 @@ function ProductDetails({
                     {product.badges &&
                       product.badges.length > 0 &&
                       product.badges.map((badge) => (
-                        <Badge
-                          key={badge}
-                          variant="outline"
-                          className="text-xs sm:text-sm"
-                        >
+                        <Badge key={badge} variant="outline" className="text-xs sm:text-sm">
                           {badge}
                         </Badge>
                       ))}
@@ -816,9 +791,7 @@ function ProductDetails({
             <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
               <div>
                 <h2 className="text-2xl font-bold">التقييمات والمراجعات</h2>
-                <p className="text-muted-foreground mt-1">
-                  {reviews.length} تقييمات من عملائنا
-                </p>
+                <p className="text-muted-foreground mt-1">{reviews.length} تقييمات من عملائنا</p>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -828,17 +801,12 @@ function ProductDetails({
                     <StarIcon className="h-6 w-6 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">
-                      متوسط التقييم
-                    </p>
+                    <p className="text-sm text-muted-foreground">متوسط التقييم</p>
                     <p className="text-2xl font-bold">
                       {reviews.length > 0
-                        ? (
-                            reviews.reduce(
-                              (acc, review) => acc + review.rating,
-                              0
-                            ) / reviews.length
-                          ).toFixed(1)
+                        ? (reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length).toFixed(
+                            1
+                          )
                         : "0.0"}
                     </p>
                   </div>
@@ -850,9 +818,7 @@ function ProductDetails({
                     <MessageSquare className="h-6 w-6 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">
-                      عدد التقييمات
-                    </p>
+                    <p className="text-sm text-muted-foreground">عدد التقييمات</p>
                     <p className="text-2xl font-bold">{reviews.length}</p>
                   </div>
                 </div>
@@ -866,11 +832,7 @@ function ProductDetails({
                     <p className="text-sm text-muted-foreground">نسبة الرضا</p>
                     <p className="text-2xl font-bold">
                       {reviews.length > 0
-                        ? Math.round(
-                            (reviews.filter((r) => r.rating >= 4).length /
-                              reviews.length) *
-                              100
-                          )
+                        ? Math.round((reviews.filter((r) => r.rating >= 4).length / reviews.length) * 100)
                         : 0}
                       %
                     </p>
@@ -885,9 +847,7 @@ function ProductDetails({
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2">
-                    التقييم
-                  </label>
+                  <label className="block text-sm font-medium mb-2">التقييم</label>
                   <div className="flex gap-1">
                     {[...Array(5)].map((_, index) => {
                       const starValue = index + 1;
@@ -902,11 +862,7 @@ function ProductDetails({
                         >
                           <StarIcon
                             className={`h-6 w-6 transition-colors ${
-                              (
-                                hoveredRating
-                                  ? hoveredRating >= starValue
-                                  : rating >= starValue
-                              )
+                              (hoveredRating ? hoveredRating >= starValue : rating >= starValue)
                                 ? "text-amber-500 fill-amber-500"
                                 : "text-gray-300"
                             }`}
@@ -915,16 +871,12 @@ function ProductDetails({
                       );
                     })}
                     {rating > 0 && (
-                      <span className="text-sm text-muted-foreground mr-2 mt-1">
-                        ({rating} من 5)
-                      </span>
+                      <span className="text-sm text-muted-foreground mr-2 mt-1">({rating} من 5)</span>
                     )}
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2">
-                    التعليق
-                  </label>
+                  <label className="block text-sm font-medium mb-2">التعليق</label>
                   <Textarea
                     placeholder="اكتب تعليقك هنا..."
                     className="min-h-[100px]"
@@ -946,11 +898,7 @@ function ProductDetails({
                     "إرسال التقييم"
                   )}
                 </Button>
-                {!currentUser && (
-                  <p className="text-sm text-red-500 mt-2">
-                    يجب تسجيل الدخول لإضافة تقييم
-                  </p>
-                )}
+                {!currentUser && <p className="text-sm text-red-500 mt-2">يجب تسجيل الدخول لإضافة تقييم</p>}
               </CardContent>
             </Card>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -989,20 +937,16 @@ function ProductDetails({
                   <div className="bg-primary/5 p-4 rounded-full mb-4">
                     <MessageSquare className="h-8 w-8 sm:h-10 sm:w-10 text-primary/60" />
                   </div>
-                  <h3 className="text-lg sm:text-xl font-medium mb-2">
-                    لا توجد تقييمات
-                  </h3>
+                  <h3 className="text-lg sm:text-xl font-medium mb-2">لا توجد تقييمات</h3>
                   <p className="text-muted-foreground text-sm sm:text-base text-center max-w-md">
-                    لا توجد تقييمات لهذا المنتج حتى الآن. كن أول من يشارك رأيه
-                    ويساعد الآخرين في اتخاذ قرار الشراء.
+                    لا توجد تقييمات لهذا المنتج حتى الآن. كن أول من يشارك رأيه ويساعد الآخرين في اتخاذ قرار
+                    الشراء.
                   </p>
                   <Button
                     variant="outline"
                     className="mt-6 gap-2 group hover:bg-primary hover:text-white transition-all duration-300"
                     onClick={() =>
-                      document
-                        .getElementById("add-review-section")
-                        ?.scrollIntoView({ behavior: "smooth" })
+                      document.getElementById("add-review-section")?.scrollIntoView({ behavior: "smooth" })
                     }
                   >
                     <StarIcon className="h-4 w-4 group-hover:fill-white transition-all duration-300" />
@@ -1015,6 +959,17 @@ function ProductDetails({
         </div>
       </main>
       <Footer />
+
+      {/* Image Zoom Modal */}
+      <ImageZoomModal
+        isOpen={isZoomModalOpen}
+        onClose={handleZoomModalClose}
+        imageSrc={allImages[currentZoomImageIndex]?.src || mainImageToShow}
+        imageAlt={allImages[currentZoomImageIndex]?.alt || product.name}
+        images={allImages}
+        currentImageIndex={currentZoomImageIndex}
+        onImageChange={handleZoomImageChange}
+      />
     </div>
   );
 }
